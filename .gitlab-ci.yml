@@ -3,13 +3,13 @@ image: node:8.12.0
 variables:
   NODE_ENV: development
 
-before_script:
-  - npm install
+#before_script:
+#  - npm install
 
-stages:
-  - build
-  - test
-  - deploy
+# stages:
+  # - build
+  # - test
+  # - deploy
 
 build:
   stage: build
@@ -20,14 +20,6 @@ build:
       - node_modules/
       - dist/
 
-#test:
-#  stage: test
-#  script:
-#    - npm run test
-
-# Job: Deploy
-# Zips the contents of our built application, uploads to S3
-# Configures a new EB version and switches to that version
 deploy:
   stage: deploy
   only:
