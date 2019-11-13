@@ -21,7 +21,7 @@ export const StoreSchedulerPERNOD = new CronJob("10 */1 * * * *", async () => {
     await syncStoreB2B("pernod");
 }, null, null, "America/Santiago");
 
-export const StoreSchedulerANDINA = new CronJob("25 */1 * * * *", async () => {
+export const StoreSchedulerANDINA = new CronJob("5 */1 * * * *", async () => {
     await syncStoreB2B("andina");
 }, null, null, "America/Santiago");
 
@@ -35,16 +35,86 @@ export async function syncStoreB2B(client: string): Promise<void> {
         await B2B_SERVICE.startSyncGeneral(client, retail);
         const folios: string[] = await getConnection(client).getCustomRepository(StoreRepository).listStore();
         const ListStore = await B2B_SERVICE.lastStoreByDate(client);
-        for (const chunk of Util.chunk(ListStore, 100)) {
-            await Promise.all(chunk.map((store) => storeProcess(client, store, folios)));
-        }
+        const localRetail = ListStore.map((store) => `('${store.codLocal}', '${store.retail}')`);
+
+        // Buscar en Store master solo las salas que esten en la aplicacion vigente
+        const allStoreMaster = await MASTER_SERVICE.findStore2(localRetail);
+        // Ultimas visitas reportadas por SUPI en base a las salas disponibles en la aplicacion
+        const allUltimasVisitas = await SUPI_SERVICE.visitaCadem(folios);
+
+        const casoPractico = allStoreMaster[0];
+        await storeProcessv2(client, ListStore, casoPractico, allUltimasVisitas);
+
+        /*for (const chunk of Util.chunk(allStoreMaster, 100)) {
+            await Promise.all(chunk.map((store) => storeProcessv2(client, ListStore, store, allUltimasVisitas)));
+        }*/
+
         await summaryProcess(client);
         await B2B_SERVICE.resetGeneralPending(client, retail);
         await B2B_SERVICE.stopSyncGeneral(client, retail);
     }
 }
 
-async function storeProcess(client: string, store: B2B_SERVICE.ILastStoreByDate, folios: string[]): Promise<void> {
+const storeProcessv2 = async (client, ListStore, storeMaster, allUltimasVisitas) => {
+    // Busca la sala B2B
+    const storeB2B = ListStore.find((store) =>
+    store.codLocal === storeMaster.cod_local && store.retail === storeMaster.cadena);
+    // Format dates
+    storeB2B.actualizacion_b2b = moment(storeB2B.actualizacion_b2b).format("YYYY-MM-DD");
+    storeB2B.fecha_sin_venta = moment(storeB2B.fecha_sin_venta).format("YYYY-MM-DD");
+
+    // Actualizar fecha b2b????
+    if (!storeB2B.fecha_sin_venta) {
+    await getConnection(client)
+        .getCustomRepository(StoreRepository)
+        .updateDateB2b(storeB2B.actualizacion_b2b, storeMaster.folio);
+    }
+    // Busca si tiene visitas
+    const visitaSUPI = allUltimasVisitas.find((visita) => Number(visita.folio) === Number(storeMaster.folio));
+
+    const newStore = new Store();
+    newStore.folio = storeMaster.folio;
+    newStore.codLocal = storeMaster.cod_local ? storeMaster.cod_local : storeB2B.codLocal;
+    newStore.bandera = storeMaster.bandera;
+    newStore.direccion = storeMaster.direccion;
+    newStore.cadena = storeMaster.cadena === "GRUPO FALABELLA" ? "TOTTUS" : storeMaster.cadena;
+    newStore.latitud = storeMaster.latitud;
+    newStore.longitud = storeMaster.longitud;
+    newStore.descripcion = storeMaster.descripcion;
+
+    newStore.dateB2B = storeB2B.actualizacion_b2b;
+
+    // Visita SUPI
+    if (visitaSUPI) {
+        newStore.idVisita = visitaSUPI.id_visita;
+        newStore.mide = visitaSUPI.mide;
+        newStore.realizada = visitaSUPI.realizada;
+        newStore.fechaVisita = visitaSUPI.fecha_visita;
+        newStore.pendiente = visitaSUPI.pendiente;
+    }
+
+    let Items = await itemService.listItems(
+    client, storeB2B.codLocal, storeB2B.retail, storeMaster.folio, storeB2B.fecha_sin_venta);
+    if (visitaSUPI && visitaSUPI.realizada) {
+        const toma = await SUPI_SERVICE.tomaVisita(visitaSUPI.id_visita);
+        Items = itemService.setPresenciaCadem(Items, toma);
+        newStore.osa = SUPI_SERVICE.OSA(toma);
+    }
+
+    newStore.ventaPerdida = itemService.totalVentaPerdida(Items);
+    await Promise.all([
+        getConnection(client).getCustomRepository(ItemRepository).removeByStore(storeMaster.folio),
+        getConnection(client).getCustomRepository(StoreRepository).removeByStoreId(storeMaster.folio),
+    ]);
+
+    if (Items.length > 0) {
+        await getConnection(client).getCustomRepository(ItemRepository).bulkCreate(client, Items);
+    }
+
+    await getConnection(client).getRepository(Store).save(newStore);
+};
+
+/* async function storeProcess(client: string, store: B2B_SERVICE.ILastStoreByDate, folios: string[]): Promise<void> {
     const StoreMaster = await MASTER_SERVICE.findStore(store.codLocal, store.retail);
     if (StoreMaster.folio && folios.some((folio) => StoreMaster.folio === Number(folio))) {
         if (!store.fecha_sin_venta) {
@@ -65,21 +135,22 @@ async function storeProcess(client: string, store: B2B_SERVICE.ILastStoreByDate,
         store.actualizacion_b2b = moment(store.actualizacion_b2b).format("YYYY-MM-DD");
         newStore.dateB2B = store.actualizacion_b2b;
 
-        const cadem = await SUPI_SERVICE.visitaCadem(StoreMaster.folio);
-        newStore.idVisita = cadem.id_visita;
-        newStore.mide = cadem.mide;
-        newStore.realizada = cadem.realizada;
-        newStore.fechaVisita = cadem.fecha_visita;
-        newStore.pendiente = cadem.pendiente;
+        const cadem = await SUPI_SERVICE.visitaCadem([String(StoreMaster.folio)]);
+        debugger;
+        // newStore.idVisita = cadem.id_visita;
+        // newStore.mide = cadem.mide;
+        // newStore.realizada = cadem.realizada;
+        // newStore.fechaVisita = cadem.fecha_visita;
+        // newStore.pendiente = cadem.pendiente;
         store.fecha_sin_venta = moment(store.fecha_sin_venta).format("YYYY-MM-DD");
-        let Items = await itemService.listItems(
-            client, store.codLocal, store.retail, StoreMaster.folio, store.fecha_sin_venta);
-        if (cadem.realizada) {
-            const toma = await SUPI_SERVICE.tomaVisita(cadem.id_visita);
-            Items = itemService.setPresenciaCadem(Items, toma);
-            newStore.osa = SUPI_SERVICE.OSA(toma);
-        }
-        newStore.ventaPerdida = itemService.totalVentaPerdida(Items);
+        // let Items = await itemService.listItems(
+        //    client, store.codLocal, store.retail, StoreMaster.folio, store.fecha_sin_venta);
+        // if (cadem.realizada) {
+        //    const toma = await SUPI_SERVICE.tomaVisita(cadem.id_visita);
+        //    Items = itemService.setPresenciaCadem(Items, toma);
+        //    newStore.osa = SUPI_SERVICE.OSA(toma);
+        // }
+        // newStore.ventaPerdida = itemService.totalVentaPerdida(Items);
         await Promise.all([
             getConnection(client).getCustomRepository(ItemRepository).removeByStore(StoreMaster.folio),
             getConnection(client).getCustomRepository(StoreRepository).removeByStoreId(StoreMaster.folio),
@@ -89,7 +160,7 @@ async function storeProcess(client: string, store: B2B_SERVICE.ILastStoreByDate,
         }
         await getConnection(client).getRepository(Store).save(newStore);
     }
-}
+} */
 
 async function summaryProcess(client: string): Promise<void> {
     moment.locale("es");
