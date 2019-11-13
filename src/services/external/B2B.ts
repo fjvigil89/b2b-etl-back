@@ -25,21 +25,19 @@ export async function lastStoreByDate(client: string): Promise<ILastStoreByDate[
         , a.retail
         , MAX(a.fecha) as fecha_sin_venta
         , b.actualizacion_b2b
-    FROM
-        movimiento_last_days a
+    FROM movimiento a
     LEFT JOIN (
         SELECT
             cod_local
             , retail
             , MAX(fecha) as actualizacion_b2b
-        FROM
-            movimiento_last_days
-        GROUP BY
-            cod_local, retail
-    ) b ON
-        a.cod_local = b.cod_local
-        AND a.retail = b.retail
-    WHERE a.venta_unidades IS NOT NULL
+        FROM movimiento
+        GROUP BY cod_local, retail
+    ) b ON a.cod_local = b.cod_local AND a.retail = b.retail
+    WHERE
+        a.venta_unidades IS NOT NULL
+        AND fecha >= DATE_SUB(CURDATE(), INTERVAL 10 day)
+        AND itemValido = 1
     GROUP BY a.cod_local, a.retail
     `));
 }

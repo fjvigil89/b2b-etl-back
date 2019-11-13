@@ -36,6 +36,24 @@ export function findStore(storeId: any, retail: string): Promise<IStoreMaster> {
             });
 }
 
+export function findStore2(allStore: string[]): Promise<IStoreMaster[]> {
+    return MASTER.then((conn) => conn.query(`
+            SELECT a.id as folio
+                , a.descripcion
+                , cod_local
+                , direccion
+                , b.nombre as bandera
+                , c.nombre AS cadena
+                , a.longitud
+                , a.latitud
+            FROM Store_Master a
+            INNER JOIN STR_Bandera b ON a.id_bandera = b.id
+            INNER JOIN STR_Cadena c ON b.id_cadena = c.id
+            WHERE (cod_local, c.nombre) IN (${allStore})
+        `))
+            .then((result) => JSON.parse(JSON.stringify(result)));
+}
+
 export function findStores(): Promise<any[]> {
     return MASTER.then((conn) => conn.query(`
         SELECT a.id as folio
