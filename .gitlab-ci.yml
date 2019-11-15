@@ -1,30 +1,18 @@
-image: node:8.12.0
+image: node:8.11.2
 
-variables:
-  NODE_ENV: development
+before_script:
+  - 'which ssh-agent || (apt update -y && apt install openssh-client -y)'
+  - npm install
 
-#before_script:
-#  - npm install
+stages:
+  - deploy
 
-# stages:
-  # - build
-  # - test
-  # - deploy
-
-build:
-  stage: build
-  script:
-    - npm run build
-  artifacts:
-    paths:
-      - node_modules/
-      - dist/
-
+# Despliegue solo en rama master
 deploy:
-  stage: deploy
   only:
     - master
+  stage: deploy
   allow_failure: false
   when: manual
   script:
-    - ./deploy/deploy.sh
+    - bash deploy/deploy.sh

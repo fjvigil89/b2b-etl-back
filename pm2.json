@@ -1,0 +1,14 @@
+{
+    "apps": [
+      {
+        "exec_mode": "fork_mode",
+        "script": "./dist/index.js",
+        "name": "b2b-etl-back",
+        "env": {
+          "PORT": 5005,
+          "NODE_ENV": "production"
+        }
+      }
+    ]
+  }
+  
