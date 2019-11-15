@@ -90,7 +90,17 @@ export function staticStock(client: string, storeId: string, itemId: number, dat
 
 export function getGeneralPending(client: string): Promise<string> {
     return B2B[client].then((conn) =>
-        conn.query("SELECT * FROM `general` WHERE sincronizacion_app = 1 AND sync_started IS FALSE LIMIT 1")
+        conn.query(`
+            SELECT *
+            FROM \`general\`
+            WHERE sincronizacion_app = 1
+                AND 0 = (
+                    SELECT COUNT(1)
+                    FROM \`general\`
+                    WHERE sync_started = 1
+                )
+            LIMIT 1
+        `)
             .then((result) => {
                 if (result.length) {
                     return result[0].retail;
