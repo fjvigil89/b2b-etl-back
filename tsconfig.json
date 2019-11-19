@@ -35,8 +35,5 @@
     "dist",
     "typings",
     "**/__tests/*.ts"
-  ],
-  "files": [
-    "src/interfaces/type.d.ts"
   ]
 }
