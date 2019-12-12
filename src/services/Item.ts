@@ -28,7 +28,6 @@ export class ItemService {
         folio: number,
         date: string,
     ): Promise<Item[]> {
-        debugger;
         const detail = await B2B_SERVICE.detailItems(client, storeId, retail, date);
         const detailItems: Item[] = [];
         await Promise.all(detail.map(async (item) => {
