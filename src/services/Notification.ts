@@ -6,9 +6,9 @@ export class NotificationService {
 
   public async getAllTokens(client: string) {
     const clients = await getConnection(client).getRepository(User).find({});
-    console.log("[INFO][NotificationService] clients: ", clients);
-    const tokens = await clients.map((c) => c.notification);
-    console.log("[INFO][NotificationService] tokens: ", clients);
+    const tokens = clients
+                      .filter((c) => c.notification !== null)
+                      .map((c) => c.notification);
     return tokens;
   }
 
