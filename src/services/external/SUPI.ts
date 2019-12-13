@@ -65,7 +65,7 @@ function ultimasVisitas(folios: string[]): Promise<Array<{
                     , C.FOLIOCADEM as folio
                     , ROW_NUMBER() OVER (PARTITION BY C.FOLIOCADEM ORDER BY a.ID_VISITA DESC) AS row_num
                 FROM VISITA a WITH(NOLOCK)
-                INNER JOIN ESTUDIOSALA b WITH(NOLOCK) ON a.ID_ESTUDIOSALA = b.ID_ESTUDIOSALA AND b.ID_ESTUDIO = 34
+                INNER JOIN ESTUDIOSALA b WITH(NOLOCK) ON a.ID_ESTUDIOSALA = b.ID_ESTUDIOSALA AND b.ID_ESTUDIO = 438
                 INNER JOIN SALA c WITH(NOLOCK) ON b.ID_SALA = c.ID_SALA
                 WHERE
                     c.FOLIOCADEM IN (${folios})
