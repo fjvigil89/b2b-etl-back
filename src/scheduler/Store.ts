@@ -10,6 +10,7 @@ import { summary } from "../services/external/B2B";
 import * as MASTER_SERVICE from "../services/external/Master";
 import { findStores } from "../services/external/Master";
 import * as SUPI_SERVICE from "../services/external/SUPI";
+import { NotificationService } from "../services/Notification";
 import * as Util from "../utils/service";
 
 // CronJobs
@@ -30,12 +31,13 @@ export const StoreSchedulerABI = new CronJob("20 */1 * * * *", async () => {
 }, null, null, "America/Santiago");
 
 const itemService = new ItemService();
+const notificationService = new NotificationService();
 
 export async function syncStoreB2B(client: string): Promise<void> {
     await Connection;
     const retail = await B2B_SERVICE.getGeneralPending(client);
     if (retail) {
-        console.log("SINCRONIZANDO", retail);
+        console.log("[INFO] SINCRONIZANDO ", retail);
         await B2B_SERVICE.startSyncGeneral(client, retail);
         const folios: string[] = await getConnection(client).getCustomRepository(StoreRepository).listStore();
         const ListStore = await B2B_SERVICE.lastStoreByDate(client);
@@ -51,9 +53,15 @@ export async function syncStoreB2B(client: string): Promise<void> {
             await Promise.all(chunk.map((store) => storeProcessv2(client, ListStore, store, allUltimasVisitas)));
         }
 
+        console.log("[INFO] Actualizando resumen");
         await summaryProcess(client);
+        console.log("[INFO] Finalizando Sincronizacion");
         await B2B_SERVICE.resetGeneralPending(client, retail);
         await B2B_SERVICE.stopSyncGeneral(client, retail);
+        console.log("[INFO] Enviando notificación");
+        const tokens = await notificationService.getAllTokens(client);
+        const notificationMessage = `Se actualizo la información del retail ${retail}`;
+        await notificationService.sendNotification(tokens, notificationMessage);
     }
 }
 

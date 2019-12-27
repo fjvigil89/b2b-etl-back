@@ -4,6 +4,7 @@ import {
     Item,
     Store,
     Summary,
+    User,
 } from "../entity";
 import { config, DIALECT } from "./config";
 
@@ -15,6 +16,7 @@ export const Connection = createConnections([{
         Item,
         Store,
         Summary,
+        User,
     ],
     host: config.PERNOD_DB.SERVER,
     logging: true,
@@ -31,6 +33,7 @@ export const Connection = createConnections([{
         Item,
         Store,
         Summary,
+        User,
     ],
     host: config.ICB_DB.SERVER,
     logging: true,
@@ -47,6 +50,7 @@ export const Connection = createConnections([{
         Item,
         Store,
         Summary,
+        User,
     ],
     host: config.ANDINA_DB.SERVER,
     logging: true,

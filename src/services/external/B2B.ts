@@ -51,8 +51,14 @@ export async function clearItems(client: string): Promise<void> {
 }
 
 export async function loadLastDays(client: string, date: string, retail: string): Promise<void> {
-    return B2B[client].then((conn) => conn.query(`INSERT INTO movimiento_last_days
-    SELECT * from movimiento WHERE fecha = "${date}" AND itemValido = 1 AND retail = "${retail}"`));
+    return B2B[client].then((conn) => conn.query(`
+        INSERT INTO movimiento_last_days
+        SELECT *
+        FROM movimiento
+        WHERE fecha = "${date}"
+            AND itemValido = 1
+            AND retail = "${retail}"
+    `));
 }
 
 export async function detailItems(client: string, StoreId: any, retail: string, date: string): Promise<IDetailItem[]> {

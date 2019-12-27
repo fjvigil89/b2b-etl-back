@@ -12,7 +12,7 @@ process.on("unhandledRejection", (reason, promise) => {
     promise.catch((err) => console.log(err));
 });
 
-console.log("Cargando archivo de producción");
+console.log("[INFO] Cargando archivo de producción");
 dotenv.config({ path: resolve() + "/.env" });
 
 StoreSchedulerABI.start();
