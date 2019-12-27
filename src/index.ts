@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 import { resolve } from "path";
 
 import {
+    StoreSchedulerABI,
     StoreSchedulerANDINA,
     StoreSchedulerICB,
     StoreSchedulerPERNOD,
@@ -14,6 +15,7 @@ process.on("unhandledRejection", (reason, promise) => {
 console.log("Cargando archivo de producción");
 dotenv.config({ path: resolve() + "/.env" });
 
+StoreSchedulerABI.start();
 StoreSchedulerICB.start();
 StoreSchedulerPERNOD.start();
 StoreSchedulerANDINA.start();
