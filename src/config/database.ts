@@ -67,6 +67,7 @@ export const Connection = createConnections([{
         Item,
         Store,
         Summary,
+        User,
     ],
     host: config.ABI_DB.SERVER,
     logging: false,
