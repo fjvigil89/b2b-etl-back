@@ -17,11 +17,11 @@ export interface IToma {
     categoria: string;
 }
 
-export async function visitaCadem(folios: string[]): Promise<IdataCadem[]> {
+export async function visitaCadem(folios: string[], codigoEstudio: number): Promise<IdataCadem[]> {
     const REALIZADO = 4;
     const PENDIENTE = 1;
 
-    const visitas = await ultimasVisitas(folios);
+    const visitas = await ultimasVisitas(folios, codigoEstudio);
 
     const groupByFolio = {};
     for (const visita of visitas) {
@@ -50,7 +50,7 @@ export async function visitaCadem(folios: string[]): Promise<IdataCadem[]> {
     return result;
 }
 
-function ultimasVisitas(folios: string[]): Promise<Array<{
+function ultimasVisitas(folios: string[], codigoEstudio: number): Promise<Array<{
         id_visita: number,
         fecha: string,
         estado: number,
@@ -65,7 +65,9 @@ function ultimasVisitas(folios: string[]): Promise<Array<{
                     , C.FOLIOCADEM as folio
                     , ROW_NUMBER() OVER (PARTITION BY C.FOLIOCADEM ORDER BY a.ID_VISITA DESC) AS row_num
                 FROM VISITA a WITH(NOLOCK)
-                INNER JOIN ESTUDIOSALA b WITH(NOLOCK) ON a.ID_ESTUDIOSALA = b.ID_ESTUDIOSALA AND b.ID_ESTUDIO = 438
+                INNER JOIN ESTUDIOSALA b WITH(NOLOCK) ON
+                    a.ID_ESTUDIOSALA = b.ID_ESTUDIOSALA
+                    AND b.ID_ESTUDIO = ${codigoEstudio}
                 INNER JOIN SALA c WITH(NOLOCK) ON b.ID_SALA = c.ID_SALA
                 WHERE
                     c.FOLIOCADEM IN (${folios})

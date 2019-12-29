@@ -33,6 +33,13 @@ export const StoreSchedulerABI = new CronJob("20 */1 * * * *", async () => {
 const itemService = new ItemService();
 const notificationService = new NotificationService();
 
+const ESTUDIOS_SUPI_CLIENTS = {
+    andina: 438,
+    abi: 480,
+    pernod: 34,
+    icb: 101,
+};
+
 export async function syncStoreB2B(client: string): Promise<void> {
     await Connection;
     const retail = await B2B_SERVICE.getGeneralPending(client);
@@ -47,7 +54,11 @@ export async function syncStoreB2B(client: string): Promise<void> {
         const allStoreMaster = await MASTER_SERVICE.findStore2(localRetail);
 
         // Ultimas visitas reportadas por SUPI en base a las salas disponibles en la aplicacion
-        const allUltimasVisitas = await SUPI_SERVICE.visitaCadem(folios);
+        const codigoEstudioSupi = ESTUDIOS_SUPI_CLIENTS[client];
+        let allUltimasVisitas = [];
+        if (codigoEstudioSupi) {
+            allUltimasVisitas = await SUPI_SERVICE.visitaCadem(folios, codigoEstudioSupi);
+        }
 
         for (const chunk of Util.chunk(allStoreMaster, 100)) {
             await Promise.all(chunk.map((store) => storeProcessv2(client, ListStore, store, allUltimasVisitas)));
