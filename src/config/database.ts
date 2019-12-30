@@ -25,6 +25,7 @@ export const Connection = createConnections([{
     synchronize: false,
     type: DIALECT,
     username: config.PERNOD_DB.USER_DB,
+    connectTimeout: 25000,
 }, {
     name: "icb",
     database: config.ICB_DB.DB,
@@ -42,6 +43,7 @@ export const Connection = createConnections([{
     synchronize: false,
     type: DIALECT,
     username: config.ICB_DB.USER_DB,
+    connectTimeout: 25000,
 }, {
     name: "andina",
     database: config.ANDINA_DB.DB,
@@ -59,6 +61,7 @@ export const Connection = createConnections([{
     synchronize: false,
     type: DIALECT,
     username: config.ANDINA_DB.USER_DB,
+    connectTimeout: 25000,
 }, {
     name: "abi",
     database: config.ABI_DB.DB,
@@ -76,6 +79,7 @@ export const Connection = createConnections([{
     synchronize: false,
     type: DIALECT,
     username: config.ABI_DB.USER_DB,
+    connectTimeout: 25000,
 }]);
 
 export const B2B = {
@@ -89,6 +93,7 @@ export const B2B = {
         synchronize: false,
         type: DIALECT,
         username: config.ICB_B2B.USER_DB,
+        connectTimeout: 25000,
     }).connect(),
     pernod: new ConnectionManager().create({
         database: config.PERNOD_B2B.DB,
@@ -100,6 +105,7 @@ export const B2B = {
         synchronize: false,
         type: DIALECT,
         username: config.PERNOD_B2B.USER_DB,
+        connectTimeout: 25000,
     }).connect(),
     andina: new ConnectionManager().create({
         database: config.ANDINA_B2B.DB,
@@ -111,6 +117,7 @@ export const B2B = {
         synchronize: false,
         type: DIALECT,
         username: config.ANDINA_B2B.USER_DB,
+        connectTimeout: 25000,
     }).connect(),
     abi: new ConnectionManager().create({
         database: config.ABI_B2B.DB,
@@ -122,6 +129,7 @@ export const B2B = {
         synchronize: false,
         type: DIALECT,
         username: config.ABI_B2B.USER_DB,
+        connectTimeout: 25000,
     }).connect(),
 };
 
