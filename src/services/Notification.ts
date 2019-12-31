@@ -58,7 +58,7 @@ export class NotificationService {
             continue;
           } else if (receipts[key].status === "error") {
             if (receipts[key].details) {
-              console.error(`El codigo de erro es: ${receipts[key].details}`);
+              console.error(`El codigo de erro es: ${JSON.stringify(receipts[key].details)}`);
             }
           }
         }
