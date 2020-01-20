@@ -27,7 +27,7 @@ const PERNOD_PRODUCTION = {
 };
 
 const ANDINA_PRODUCTION = {
-    DB: "b2b-app",
+    DB: "b2b-andina-app",
     PASSWORD: env.B2B_ANDINA_PASSWORD,
     PORT_DB: Number(env.B2B_ANDINA_PORT),
     SERVER: env.B2B_ANDINA_SERVER,
