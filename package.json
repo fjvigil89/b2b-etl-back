@@ -1,6 +1,6 @@
 {
   "name": "back-b2b",
-  "version": "1.0.0",
+  "version": "2.0.2",
   "description": "Backend b2b",
   "main": "src/index.ts",
   "scripts": {
@@ -24,6 +24,10 @@
     {
       "name": "Francisco Sanchez",
       "email": "francisco.sanchez@cademsmart.cl"
+    },
+    {
+      "name": "Jorge Molina",
+      "email": "jorge.molina@cademsmart.cl"
     }
   ],
   "license": "MIT",
