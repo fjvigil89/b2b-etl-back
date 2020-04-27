@@ -5,7 +5,6 @@ import { ItemRepository } from "../repository/ItemRepository";
 import * as Util from "../utils/service";
 import * as B2B_SERVICE from "./external/B2B";
 import * as MASTER_SERVICE from "./external/Master";
-import * as ITEM_SERVICE from "./external/Item";
 import { IToma } from "./external/SUPI";
 
 export interface IItemsAction {
@@ -32,7 +31,7 @@ export class ItemService {
         const detail = await B2B_SERVICE.detailItems(client, storeId, retail, date);
         const detailItems: Item[] = [];
         await Promise.all(detail.map(async (item) => {
-            const detailItemMaster = await ITEM_SERVICE.detailItem(client, item.ean);
+            const detailItemMaster = await MASTER_SERVICE.detailItem(item.ean);
             const newItem = new Item();
             newItem.folio = folio;
             newItem.ean = item.ean;
