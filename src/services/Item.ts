@@ -31,7 +31,7 @@ export class ItemService {
         const detail = await B2B_SERVICE.detailItems(client, storeId, retail, date);
         const detailItems: Item[] = [];
         await Promise.all(detail.map(async (item) => {
-            const detailItemMaster = await MASTER_SERVICE.detailItem(item.ean);
+            const detailMaster = await MASTER_SERVICE.detailItem(item.ean);
             const newItem = new Item();
             newItem.folio = folio;
             newItem.ean = item.ean;
@@ -52,9 +52,9 @@ export class ItemService {
                 }
             }
             newItem.ventaPerdida = item.promedioVentas;
-            if (detailItemMaster) {
-                newItem.description = detailItemMaster.description;
-                newItem.category = detailItemMaster.category;
+            if (detailMaster) {
+                newItem.description = detailMaster.description;
+                newItem.category = detailMaster.category;
             } else {
                 newItem.description = "OTROS";
                 newItem.category = "OTROS";
