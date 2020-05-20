@@ -63,10 +63,21 @@ export async function loadLastDays(client: string, date: string, retail: string)
 
 export async function detailItems(client: string, StoreId: any, retail: string, date: string): Promise<IDetailItem[]> {
     return B2B[client].then((conn) =>
-        conn.query(`SELECT stock, ean, IFNULL(stock_pedido_tienda, 0) as stockPedidoTienda,
-        IFNULL(dias_sin_venta_consecutiva, 0) as diasSinVenta, cod_item as itemId, promedio_ventas as promedioVentas,
-        venta_unidades AS ventaUnidades FROM movimiento_last_days WHERE cod_local = "${StoreId}" AND
-        fecha = "${date}" AND retail = "${retail}"`));
+        conn.query(`
+            SELECT
+                stock
+                , ean
+                , IFNULL(stock_pedido_tienda, 0) as stockPedidoTienda
+                , IFNULL(dias_sin_venta_consecutiva, 0) as diasSinVenta
+                , cod_item as itemId
+                , promedio_ventas as promedioVentas
+                , venta_unidades AS ventaUnidades
+            FROM movimiento_last_days
+            WHERE cod_local = "${StoreId}"
+                AND fecha = "${date}"
+                AND retail = "${retail}"
+                AND caso = 1
+        `));
 }
 
 export function checkLastDate(client: string, StoreId: string): Promise<string | null> {
