@@ -1,7 +1,7 @@
 import * as moment from "moment";
 import { SUPI } from "../../config/database";
 
-interface IdataCadem {
+interface IDataCadem {
     id_visita: number;
     mide: number;
     realizada: number;
@@ -17,7 +17,7 @@ export interface IToma {
     categoria: string;
 }
 
-export async function visitaCadem(folios: string[], codigoEstudio: number): Promise<IdataCadem[]> {
+export async function visitaCadem(folios: string[], codigoEstudio: number): Promise<IDataCadem[]> {
     const REALIZADO = 4;
     const PENDIENTE = 1;
 
