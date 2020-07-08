@@ -15,6 +15,7 @@ export class NotificationService {
   public async sendNotification(tokens: string[], message: string): Promise<void> {
     const expo = new Expo();
     const messages = [];
+    tokens = [...new Set(tokens)];
     for (const pushToken of tokens) {
       if (!Expo.isExpoPushToken(pushToken)) {
         console.error(`El token ${pushToken} de celular no es valido para recibir la notification `);

@@ -69,10 +69,14 @@ export async function syncStoreB2B(client: string): Promise<void> {
         console.log("[INFO] Finalizando Sincronizacion");
         await B2B_SERVICE.resetGeneralPending(client, retail);
         await B2B_SERVICE.stopSyncGeneral(client, retail);
-        console.log("[INFO] Enviando notificación");
-        const tokens = await notificationService.getAllTokens(client);
-        const notificationMessage = `Se actualizo la información del retail ${retail}`;
-        await notificationService.sendNotification(tokens, notificationMessage);
+        
+        if (await B2B_SERVICE.isRetailProcessedAndNotificationNotSent(client, retail)) {
+            console.log("[INFO] Enviando notificación");
+            const tokens = await notificationService.getAllTokens(client);
+            const notificationMessage = `Se actualizo la información del retail ${retail}`;
+            await notificationService.sendNotification(tokens, notificationMessage);
+            await B2B_SERVICE.updateNotificationAppDate(client, retail);
+        }
     }
 }
 
