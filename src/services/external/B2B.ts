@@ -127,6 +127,43 @@ export function getGeneralPending(client: string): Promise<string> {
             }));
 }
 
+export function isRetailProcessedAndNotificationNotSent(client: string, retail: string): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const conn = await B2B[client];
+            const results: any[] = await conn.query(`SELECT * FROM general WHERE retail = ? AND ventas = 1 AND sincronizacion_app = 0 AND procesando = 0`, [retail]);
+
+            if (results.length <= 0) {
+                return resolve(false);
+            }
+
+            let last_notificacion = results[0].notificacion_app;
+
+            if (last_notificacion === null) {
+                return resolve(true);
+            }
+                
+            resolve(moment(last_notificacion).valueOf() < moment(moment().format('YYYY-MM-DD')).valueOf());
+        } catch (e) {
+            console.error(e);
+            reject(false);
+        }
+    });
+}
+  
+  export function updateNotificationAppDate(client: string, retail: string): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const conn = await B2B[client];
+            await conn.query("UPDATE `general` SET notificacion_app = DATE_FORMAT(NOW(), '%Y-%m-%d') WHERE retail = ?", [retail]);
+            
+            resolve();
+        } catch (e) {
+            reject();
+        }
+    })
+}
+
 export async function startSyncGeneral(client: string, retail: string): Promise<void> {
     await B2B[client].then((conn) =>
         conn.query("UPDATE `general` SET sync_started = TRUE WHERE retail = " + `"${retail}"`));
