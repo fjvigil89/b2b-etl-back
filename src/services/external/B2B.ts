@@ -65,18 +65,23 @@ export async function detailItems(client: string, StoreId: any, retail: string, 
     return B2B[client].then((conn) =>
         conn.query(`
             SELECT
-                stock
-                , ean
-                , IFNULL(stock_pedido_tienda, 0) as stockPedidoTienda
-                , IFNULL(dias_sin_venta_consecutiva, 0) as diasSinVenta
-                , cod_item as itemId
-                , promedio_ventas as promedioVentas
-                , venta_unidades AS ventaUnidades
-            FROM movimiento_last_days
-            WHERE cod_local = "${StoreId}"
-                AND fecha = "${date}"
-                AND retail = "${retail}"
-                AND caso = 1
+                mld.stock
+                , mld.ean
+                , IFNULL(mld.stock_pedido_tienda, 0) as stockPedidoTienda
+                , IFNULL(mld.dias_sin_venta_consecutiva, 0) as diasSinVenta
+                , mld.cod_item as itemId
+                , mld.promedio_ventas as promedioVentas
+                , mld.venta_unidades AS ventaUnidades
+            FROM movimiento mld
+            INNER JOIN casos c ON
+                mld.retail = c.retail
+                AND mld.fecha = c.fecha
+                AND mld.cod_local = c.cod_local
+                AND mld.cod_item = c.cod_item
+            WHERE
+                mld.retail = "${retail}"
+                AND mld.fecha = "${date}"
+                AND mld.cod_local = "${StoreId}"
         `));
 }
 
