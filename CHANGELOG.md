@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.0.6] - 2020-08-21
+- Update node version in gitlab-ci
+
 ## [2.0.5] - 2020-08-21
 - Ahora el proceso para determinar si un item es caso, se realiza cruzando la tabla "casos" y no usando la bandera "caso" de la
   tabla movimiento
