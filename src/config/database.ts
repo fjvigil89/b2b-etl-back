@@ -1,59 +1,38 @@
 import { ConnectionManager, createConnections } from "typeorm";
-import {
-    Case,
-    Item,
-    Store,
-    Summary,
-    User,
-} from "../entity";
+import { Case, Item, Store, Summary, User } from "../entity";
 import { config, DIALECT } from "./config";
 
-export const Connection = createConnections([{
-    name: "pernod",
-    database: config.PERNOD_DB.DB,
-    entities: [
-        Case,
-        Item,
-        Store,
-        Summary,
-        User,
-    ],
-    host: config.PERNOD_DB.SERVER,
-    logging: false,
-    password: config.PERNOD_DB.PASSWORD,
-    port: config.PERNOD_DB.PORT_DB,
-    synchronize: false,
-    type: DIALECT,
-    username: config.PERNOD_DB.USER_DB,
-    connectTimeout: 25000,
-}, {
-    name: "icb",
-    database: config.ICB_DB.DB,
-    entities: [
-        Case,
-        Item,
-        Store,
-        Summary,
-        User,
-    ],
-    host: config.ICB_DB.SERVER,
-    logging: false,
-    password: config.ICB_DB.PASSWORD,
-    port: config.ICB_DB.PORT_DB,
-    synchronize: false,
-    type: DIALECT,
-    username: config.ICB_DB.USER_DB,
-    connectTimeout: 25000,
-}, {
+export const Connection = createConnections([
+  // {
+  //   name: "pernod",
+  //   database: config.PERNOD_DB.DB,
+  //   entities: [Case, Item, Store, Summary, User],
+  //   host: config.PERNOD_DB.SERVER,
+  //   logging: false,
+  //   password: config.PERNOD_DB.PASSWORD,
+  //   port: config.PERNOD_DB.PORT_DB,
+  //   synchronize: false,
+  //   type: DIALECT,
+  //   username: config.PERNOD_DB.USER_DB,
+  //   connectTimeout: 25000,
+  // },
+  // {
+  //   name: "icb",
+  //   database: config.ICB_DB.DB,
+  //   entities: [Case, Item, Store, Summary, User],
+  //   host: config.ICB_DB.SERVER,
+  //   logging: false,
+  //   password: config.ICB_DB.PASSWORD,
+  //   port: config.ICB_DB.PORT_DB,
+  //   synchronize: false,
+  //   type: DIALECT,
+  //   username: config.ICB_DB.USER_DB,
+  //   connectTimeout: 25000,
+  // },
+  {
     name: "andina",
     database: config.ANDINA_DB.DB,
-    entities: [
-        Case,
-        Item,
-        Store,
-        Summary,
-        User,
-    ],
+    entities: [Case, Item, Store, Summary, User],
     host: config.ANDINA_DB.SERVER,
     logging: false,
     password: config.ANDINA_DB.PASSWORD,
@@ -62,16 +41,11 @@ export const Connection = createConnections([{
     type: DIALECT,
     username: config.ANDINA_DB.USER_DB,
     connectTimeout: 25000,
-}, {
+  },
+  {
     name: "abi",
     database: config.ABI_DB.DB,
-    entities: [
-        Case,
-        Item,
-        Store,
-        Summary,
-        User,
-    ],
+    entities: [Case, Item, Store, Summary, User],
     host: config.ABI_DB.SERVER,
     logging: false,
     password: config.ABI_DB.PASSWORD,
@@ -80,60 +54,97 @@ export const Connection = createConnections([{
     type: DIALECT,
     username: config.ABI_DB.USER_DB,
     connectTimeout: 25000,
-}]);
+  },
+  {
+    name: "cial",
+    database: config.CIAL_DB.DB,
+    entities: [Case, Item, Store, Summary, User],
+    host: config.CIAL_DB.SERVER,
+    logging: false,
+    password: config.CIAL_DB.PASSWORD,
+    port: config.CIAL_DB.PORT_DB,
+    synchronize: false,
+    type: DIALECT,
+    username: config.CIAL_DB.USER_DB,
+    connectTimeout: 25000,
+  },
+]);
 
 export const B2B = {
-    icb: new ConnectionManager().create({
-        database: config.ICB_B2B.DB,
-        entities: [],
-        host: config.ICB_B2B.SERVER,
-        logging: false,
-        password: config.ICB_B2B.PASSWORD,
-        port: config.ICB_B2B.PORT_DB,
-        synchronize: false,
-        type: DIALECT,
-        username: config.ICB_B2B.USER_DB,
-        connectTimeout: 25000,
-    }).connect(),
-    pernod: new ConnectionManager().create({
-        database: config.PERNOD_B2B.DB,
-        entities: [],
-        host: config.PERNOD_B2B.SERVER,
-        logging: false,
-        password: config.PERNOD_B2B.PASSWORD,
-        port: config.PERNOD_B2B.PORT_DB,
-        synchronize: false,
-        type: DIALECT,
-        username: config.PERNOD_B2B.USER_DB,
-        connectTimeout: 25000,
-    }).connect(),
-    andina: new ConnectionManager().create({
-        database: config.ANDINA_B2B.DB,
-        entities: [],
-        host: config.ANDINA_B2B.SERVER,
-        logging: false,
-        password: config.ANDINA_B2B.PASSWORD,
-        port: config.ANDINA_B2B.PORT_DB,
-        synchronize: false,
-        type: DIALECT,
-        username: config.ANDINA_B2B.USER_DB,
-        connectTimeout: 25000,
-    }).connect(),
-    abi: new ConnectionManager().create({
-        database: config.ABI_B2B.DB,
-        entities: [],
-        host: config.ABI_B2B.SERVER,
-        logging: false,
-        password: config.ABI_B2B.PASSWORD,
-        port: config.ABI_B2B.PORT_DB,
-        synchronize: false,
-        type: DIALECT,
-        username: config.ABI_B2B.USER_DB,
-        connectTimeout: 25000,
-    }).connect(),
+  // icb: new ConnectionManager()
+  //   .create({
+  //     database: config.ICB_B2B.DB,
+  //     entities: [],
+  //     host: config.ICB_B2B.SERVER,
+  //     logging: false,
+  //     password: config.ICB_B2B.PASSWORD,
+  //     port: config.ICB_B2B.PORT_DB,
+  //     synchronize: false,
+  //     type: DIALECT,
+  //     username: config.ICB_B2B.USER_DB,
+  //     connectTimeout: 25000,
+  //   })
+  //   .connect(),
+  // pernod: new ConnectionManager()
+  //   .create({
+  //     database: config.PERNOD_B2B.DB,
+  //     entities: [],
+  //     host: config.PERNOD_B2B.SERVER,
+  //     logging: false,
+  //     password: config.PERNOD_B2B.PASSWORD,
+  //     port: config.PERNOD_B2B.PORT_DB,
+  //     synchronize: false,
+  //     type: DIALECT,
+  //     username: config.PERNOD_B2B.USER_DB,
+  //     connectTimeout: 25000,
+  //   })
+  //   .connect(),
+  andina: new ConnectionManager()
+    .create({
+      database: config.ANDINA_B2B.DB,
+      entities: [],
+      host: config.ANDINA_B2B.SERVER,
+      logging: false,
+      password: config.ANDINA_B2B.PASSWORD,
+      port: config.ANDINA_B2B.PORT_DB,
+      synchronize: false,
+      type: DIALECT,
+      username: config.ANDINA_B2B.USER_DB,
+      connectTimeout: 25000,
+    })
+    .connect(),
+  abi: new ConnectionManager()
+    .create({
+      database: config.ABI_B2B.DB,
+      entities: [],
+      host: config.ABI_B2B.SERVER,
+      logging: false,
+      password: config.ABI_B2B.PASSWORD,
+      port: config.ABI_B2B.PORT_DB,
+      synchronize: false,
+      type: DIALECT,
+      username: config.ABI_B2B.USER_DB,
+      connectTimeout: 25000,
+    })
+    .connect(),
+  cial: new ConnectionManager()
+    .create({
+      database: config.CIAL_B2B.DB,
+      entities: [],
+      host: config.CIAL_B2B.SERVER,
+      logging: false,
+      password: config.CIAL_B2B.PASSWORD,
+      port: config.CIAL_B2B.PORT_DB,
+      synchronize: false,
+      type: DIALECT,
+      username: config.CIAL_B2B.USER_DB,
+      connectTimeout: 25000,
+    })
+    .connect(),
 };
 
-export const SUPI = new ConnectionManager().create({
+export const SUPI = new ConnectionManager()
+  .create({
     database: config.SOURCE_SUPI.DB,
     entities: [],
     host: config.SOURCE_SUPI.SERVER,
@@ -145,9 +156,11 @@ export const SUPI = new ConnectionManager().create({
     connectionTimeout: 120000,
     requestTimeout: 120000,
     username: config.SOURCE_SUPI.USER_DB,
-}).connect();
+  })
+  .connect();
 
-export const MASTER = new ConnectionManager().create({
+export const MASTER = new ConnectionManager()
+  .create({
     database: config.SOURCE_MASTER.DB,
     entities: [],
     host: config.SOURCE_MASTER.SERVER,
@@ -156,10 +169,13 @@ export const MASTER = new ConnectionManager().create({
     port: config.SOURCE_MASTER.PORT_DB,
     synchronize: false,
     type: DIALECT,
+    connectTimeout: 60000,
     username: config.SOURCE_MASTER.USER_DB,
-}).connect();
+  })
+  .connect();
 
-export const PRINCIPAL = new ConnectionManager().create({
+export const PRINCIPAL = new ConnectionManager()
+  .create({
     database: config.SOURCE_PRINCIPAL.DB,
     entities: [],
     host: config.SOURCE_PRINCIPAL.SERVER,
@@ -168,5 +184,7 @@ export const PRINCIPAL = new ConnectionManager().create({
     port: config.SOURCE_PRINCIPAL.PORT_DB,
     synchronize: false,
     type: DIALECT,
+    connectTimeout: 60000,
     username: config.SOURCE_PRINCIPAL.USER_DB,
-}).connect();
+  })
+  .connect();
