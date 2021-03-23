@@ -72,7 +72,7 @@ const ESTUDIOS_SUPI_CLIENTS = {
   abi: 480,
   pernod: 34,
   icb: 101,
-  cial: 60,
+  cial: 504,
 };
 
 export async function syncStoreB2B(client: string): Promise<void> {
