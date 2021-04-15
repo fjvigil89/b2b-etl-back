@@ -12,6 +12,7 @@ import { findStores } from "../services/external/Master";
 import * as SUPI_SERVICE from "../services/external/SUPI";
 import { NotificationService } from "../services/Notification";
 import * as Util from "../utils/service";
+import * as SMARTWEB_SERVICE from "../services/external/SmartWeb";
 
 // CronJobs
 export const StoreSchedulerICB = new CronJob(
@@ -129,6 +130,8 @@ export async function syncStoreB2B(client: string): Promise<void> {
       );
       await B2B_SERVICE.updateNotificationAppDate(client, retail);
     }
+
+    console.log("[INFO] Termino");
   }
 }
 
@@ -160,7 +163,8 @@ const storeProcessv2 = async (
   }
   // Busca si tiene visitas
   const visitaSUPI = allUltimasVisitas.find(
-    (visita) => Number(visita.folio) === Number(storeMaster.folio)
+    (visita) =>
+      Number(visita.folio) === Number(storeMaster.folio /*"14065001"*/)
   );
 
   const newStore = new Store();
@@ -187,13 +191,20 @@ const storeProcessv2 = async (
     newStore.pendiente = visitaSUPI.pendiente;
   }
 
+  const ultimoQuiereCademSmartYquiebreConsecutivo = await SMARTWEB_SERVICE.ultimoQuiereCademSmartYquiebreConsecutivo(
+    client,
+    storeMaster.folio // "41065005"
+  );
+
   let Items = await itemService.listItems(
     client,
     storeB2B.codLocal,
     storeB2B.retail,
     storeMaster.folio,
-    storeB2B.fecha_sin_venta
+    storeB2B.fecha_sin_venta,
+    ultimoQuiereCademSmartYquiebreConsecutivo
   );
+
   if (visitaSUPI && visitaSUPI.realizada) {
     const toma = await SUPI_SERVICE.tomaVisita(visitaSUPI.id_visita);
     Items = itemService.setPresenciaCadem(Items, toma);

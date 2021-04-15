@@ -3,32 +3,6 @@ import { Case, Item, Store, Summary, User } from "../entity";
 import { config, DIALECT } from "./config";
 
 export const Connection = createConnections([
-  // {
-  //   name: "pernod",
-  //   database: config.PERNOD_DB.DB,
-  //   entities: [Case, Item, Store, Summary, User],
-  //   host: config.PERNOD_DB.SERVER,
-  //   logging: false,
-  //   password: config.PERNOD_DB.PASSWORD,
-  //   port: config.PERNOD_DB.PORT_DB,
-  //   synchronize: false,
-  //   type: DIALECT,
-  //   username: config.PERNOD_DB.USER_DB,
-  //   connectTimeout: 25000,
-  // },
-  // {
-  //   name: "icb",
-  //   database: config.ICB_DB.DB,
-  //   entities: [Case, Item, Store, Summary, User],
-  //   host: config.ICB_DB.SERVER,
-  //   logging: false,
-  //   password: config.ICB_DB.PASSWORD,
-  //   port: config.ICB_DB.PORT_DB,
-  //   synchronize: false,
-  //   type: DIALECT,
-  //   username: config.ICB_DB.USER_DB,
-  //   connectTimeout: 25000,
-  // },
   {
     name: "andina",
     database: config.ANDINA_DB.DB,
@@ -68,37 +42,22 @@ export const Connection = createConnections([
     username: config.CIAL_DB.USER_DB,
     connectTimeout: 25000,
   },
+  // {
+  //   name: "cial",
+  //   database: config.CIAL_TESTING_DB.DB,
+  //   entities: [Case, Item, Store, Summary, User],
+  //   host: config.CIAL_TESTING_DB.SERVER,
+  //   logging: false,
+  //   password: config.CIAL_TESTING_DB.PASSWORD,
+  //   port: config.CIAL_TESTING_DB.PORT_DB,
+  //   synchronize: false,
+  //   type: DIALECT,
+  //   username: config.CIAL_TESTING_DB.USER_DB,
+  //   connectTimeout: 25000,
+  // },
 ]);
 
 export const B2B = {
-  // icb: new ConnectionManager()
-  //   .create({
-  //     database: config.ICB_B2B.DB,
-  //     entities: [],
-  //     host: config.ICB_B2B.SERVER,
-  //     logging: false,
-  //     password: config.ICB_B2B.PASSWORD,
-  //     port: config.ICB_B2B.PORT_DB,
-  //     synchronize: false,
-  //     type: DIALECT,
-  //     username: config.ICB_B2B.USER_DB,
-  //     connectTimeout: 25000,
-  //   })
-  //   .connect(),
-  // pernod: new ConnectionManager()
-  //   .create({
-  //     database: config.PERNOD_B2B.DB,
-  //     entities: [],
-  //     host: config.PERNOD_B2B.SERVER,
-  //     logging: false,
-  //     password: config.PERNOD_B2B.PASSWORD,
-  //     port: config.PERNOD_B2B.PORT_DB,
-  //     synchronize: false,
-  //     type: DIALECT,
-  //     username: config.PERNOD_B2B.USER_DB,
-  //     connectTimeout: 25000,
-  //   })
-  //   .connect(),
   andina: new ConnectionManager()
     .create({
       database: config.ANDINA_B2B.DB,
@@ -138,6 +97,51 @@ export const B2B = {
       synchronize: false,
       type: DIALECT,
       username: config.CIAL_B2B.USER_DB,
+      connectTimeout: 25000,
+    })
+    .connect(),
+};
+
+export const SMARTWEB = {
+  cial: new ConnectionManager()
+    .create({
+      database: config.SMARTWEB.CIAL.DB,
+      entities: [],
+      host: config.SMARTWEB.CIAL.SERVER,
+      logging: false,
+      password: config.SMARTWEB.CIAL.PASSWORD,
+      port: config.SMARTWEB.CIAL.PORT_DB,
+      synchronize: false,
+      type: DIALECT,
+      username: config.SMARTWEB.CIAL.USER_DB,
+      connectTimeout: 25000,
+    })
+    .connect(),
+  andina: new ConnectionManager()
+    .create({
+      database: config.SMARTWEB.ANDINA.DB,
+      entities: [],
+      host: config.SMARTWEB.ANDINA.SERVER,
+      logging: false,
+      password: config.SMARTWEB.ANDINA.PASSWORD,
+      port: config.SMARTWEB.ANDINA.PORT_DB,
+      synchronize: false,
+      type: DIALECT,
+      username: config.SMARTWEB.ANDINA.USER_DB,
+      connectTimeout: 25000,
+    })
+    .connect(),
+  abi: new ConnectionManager()
+    .create({
+      database: config.SMARTWEB.ABI.DB,
+      entities: [],
+      host: config.SMARTWEB.ABI.SERVER,
+      logging: false,
+      password: config.SMARTWEB.ABI.PASSWORD,
+      port: config.SMARTWEB.ABI.PORT_DB,
+      synchronize: false,
+      type: DIALECT,
+      username: config.SMARTWEB.ABI.USER_DB,
       connectTimeout: 25000,
     })
     .connect(),
