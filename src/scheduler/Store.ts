@@ -130,6 +130,8 @@ export async function syncStoreB2B(client: string): Promise<void> {
       );
       await B2B_SERVICE.updateNotificationAppDate(client, retail);
     }
+
+    console.log("[INFO] Termino");
   }
 }
 
@@ -189,15 +191,7 @@ const storeProcessv2 = async (
     newStore.pendiente = visitaSUPI.pendiente;
   }
 
-  let quiebresConsecutivos = [];
-  if (visitaSUPI) {
-    quiebresConsecutivos = await SMARTWEB_SERVICE.quiebreConsecutivo(
-      client,
-      visitaSUPI.id_visita
-    );
-  }
-
-  const ultimosQuiebres = await SMARTWEB_SERVICE.ultimoQuiereCademSmart(
+  const ultimoQuiereCademSmartYquiebreConsecutivo = await SMARTWEB_SERVICE.ultimoQuiereCademSmartYquiebreConsecutivo(
     client,
     storeMaster.folio // "41065005"
   );
@@ -208,9 +202,9 @@ const storeProcessv2 = async (
     storeB2B.retail,
     storeMaster.folio,
     storeB2B.fecha_sin_venta,
-    ultimosQuiebres,
-    quiebresConsecutivos
+    ultimoQuiereCademSmartYquiebreConsecutivo
   );
+
   if (visitaSUPI && visitaSUPI.realizada) {
     const toma = await SUPI_SERVICE.tomaVisita(visitaSUPI.id_visita);
     Items = itemService.setPresenciaCadem(Items, toma);

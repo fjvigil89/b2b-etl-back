@@ -28,8 +28,7 @@ export class ItemService {
     retail: string,
     folio: number,
     date: string,
-    ultimosQuiebres: any,
-    quiebresConsecutivos: any
+    ultimoQuiereCademSmartYquiebreConsecutivo: any
   ): Promise<Item[]> {
     const detail = await B2B_SERVICE.detailItems(
       client,
@@ -48,32 +47,26 @@ export class ItemService {
         newItem.plu = item.plu;
         newItem.stock = item.stock;
         newItem.stockPedidoTienda = item.stockPedidoTienda;
-        newItem.diasSinVenta = ++item.diasSinVenta;
+        newItem.diasSinVenta = item.diasSinVenta;
         newItem.ventaUnidades = item.ventaUnidades;
 
         // Ultimos quiebres
-        const found = ultimosQuiebres.find((element) => {
-          return element.EAN == item.ean;
-        });
+        const found = ultimoQuiereCademSmartYquiebreConsecutivo.find(
+          (element) => {
+            return element.EAN == item.ean;
+          }
+        );
 
         if (found) {
           newItem.uqc = found.UQC
             ? moment(found.UQC).format("YYYY-MM-DD")
             : "-";
-        } else {
-          newItem.uqc = "-";
-        }
 
-        // Quiebres consecutivos
-        const foundqc = quiebresConsecutivos.find((element) => {
-          return element.EAN == item.ean;
-        });
-
-        if (foundqc) {
-          newItem.qc = foundqc.QUIEBRE_CONSECUTIVO
-            ? foundqc.QUIEBRE_CONSECUTIVO
+          newItem.qc = found.QUIEBRE_CONSECUTIVO
+            ? found.QUIEBRE_CONSECUTIVO
             : "-";
         } else {
+          newItem.uqc = "-";
           newItem.qc = "-";
         }
 
