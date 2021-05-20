@@ -70,7 +70,11 @@ export class ItemService {
           newItem.qc = "-";
         }
 
-        if (item.stock === 0) {
+        if (
+          item.stock === 0 ||
+          item.stock === null ||
+          item.stock === undefined
+        ) {
           newItem.accion = "Chequear pedidos";
         } else if (item.stock < 0) {
           newItem.accion = "Ajustar";
