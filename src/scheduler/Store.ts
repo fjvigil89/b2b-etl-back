@@ -191,10 +191,11 @@ const storeProcessv2 = async (
     newStore.pendiente = visitaSUPI.pendiente;
   }
 
-  const ultimoQuiereCademSmartYquiebreConsecutivo = await SMARTWEB_SERVICE.ultimoQuiereCademSmartYquiebreConsecutivo(
-    client,
-    storeMaster.folio // "41065005"
-  );
+  const ultimoQuiereCademSmartYquiebreConsecutivo =
+    await SMARTWEB_SERVICE.ultimoQuiereCademSmartYquiebreConsecutivo(
+      client,
+      storeMaster.folio // "41065005"
+    );
 
   let Items = await itemService.listItems(
     client,
@@ -257,7 +258,11 @@ async function summaryProcess(client: string): Promise<void> {
         movItemStore.bandera = storeDetail.bandera;
         if (Number(movItemStore.ventaPerdida) === 0) {
           movItemStore.accion = null;
-        } else if (current.stock === 0) {
+        } else if (
+          current.stock === 0 ||
+          current.stock === null ||
+          current.stock === undefined
+        ) {
           movItemStore.accion = "Chequear pedidos";
         } else if (current.stock < 0) {
           movItemStore.accion = "Ajustar";
