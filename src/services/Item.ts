@@ -71,12 +71,12 @@ export class ItemService {
         }
 
         if (
-          item.stock === 0 ||
+          parseInt(item.stock.toString()) === 0 ||
           item.stock === null ||
           item.stock === undefined
         ) {
           newItem.accion = "Chequear pedidos";
-        } else if (item.stock < 0) {
+        } else if (parseInt(item.stock.toString()) < 0) {
           newItem.accion = "Ajustar";
         } else {
           const dateStaticStock = moment(date)
