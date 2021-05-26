@@ -259,12 +259,12 @@ async function summaryProcess(client: string): Promise<void> {
         if (Number(movItemStore.ventaPerdida) === 0) {
           movItemStore.accion = null;
         } else if (
-          current.stock === 0 ||
+          parseInt(current.stock.toString()) === 0 ||
           current.stock === null ||
           current.stock === undefined
         ) {
           movItemStore.accion = "Chequear pedidos";
-        } else if (current.stock < 0) {
+        } else if (parseInt(current.stock.toString()) < 0) {
           movItemStore.accion = "Ajustar";
         } else {
           movItemStore.accion = "Reponer";
