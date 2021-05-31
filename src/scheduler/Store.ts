@@ -256,15 +256,17 @@ async function summaryProcess(client: string): Promise<void> {
         movItemStore.itemValido = current.item_valido;
         movItemStore.ventasUnidades = current.venta_unidades;
         movItemStore.bandera = storeDetail.bandera;
+        let stockSala = parseFloat(current.stock)
         if (Number(movItemStore.ventaPerdida) === 0) {
           movItemStore.accion = null;
         } else if (
-          parseInt(current.stock.toString()) === 0 ||
-          current.stock === null ||
-          current.stock === undefined
+          stockSala === 0 ||
+          stockSala === null ||
+          stockSala === undefined ||
+          isNaN(stockSala)
         ) {
           movItemStore.accion = "Chequear pedidos";
-        } else if (parseInt(current.stock.toString()) < 0) {
+        } else if (stockSala < 0) {
           movItemStore.accion = "Ajustar";
         } else {
           movItemStore.accion = "Reponer";

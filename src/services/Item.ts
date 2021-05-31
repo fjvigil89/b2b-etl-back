@@ -49,6 +49,8 @@ export class ItemService {
         newItem.stockPedidoTienda = item.stockPedidoTienda;
         newItem.diasSinVenta = item.diasSinVenta;
         newItem.ventaUnidades = item.ventaUnidades;
+        // @ts-ignore
+        let stockItem = parseFloat(item.stock)
 
         // Ultimos quiebres
         const found = ultimoQuiereCademSmartYquiebreConsecutivo.find(
@@ -71,12 +73,13 @@ export class ItemService {
         }
 
         if (
-          parseInt(item.stock.toString()) === 0 ||
-          item.stock === null ||
-          item.stock === undefined
+          stockItem === 0 ||
+          stockItem === null ||
+          stockItem === undefined ||
+          isNaN(stockItem)
         ) {
           newItem.accion = "Chequear pedidos";
-        } else if (parseInt(item.stock.toString()) < 0) {
+        } else if (stockItem < 0) {
           newItem.accion = "Ajustar";
         } else {
           const dateStaticStock = moment(date)
