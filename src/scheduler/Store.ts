@@ -36,7 +36,7 @@ export const StoreSchedulerPERNOD = new CronJob(
 );
 
 export const StoreSchedulerANDINA = new CronJob(
-  "5 */1 * * * *",
+  "5 */1 * * *",
   async () => {
     await syncStoreB2B("andina");
   },
@@ -46,7 +46,7 @@ export const StoreSchedulerANDINA = new CronJob(
 );
 
 export const StoreSchedulerABI = new CronJob(
-  "20 */1 * * * *",
+  "15 */1 * * *",
   async () => {
     await syncStoreB2B("abi");
   },
@@ -56,7 +56,7 @@ export const StoreSchedulerABI = new CronJob(
 );
 
 export const StoreSchedulerCIAL = new CronJob(
-  "15 */1 * * * *",
+  "20 */1 * * *",
   async () => {
     await syncStoreB2B("cial");
   },
@@ -79,8 +79,9 @@ const ESTUDIOS_SUPI_CLIENTS = {
 export async function syncStoreB2B(client: string): Promise<void> {
   await Connection;
   const retail = await B2B_SERVICE.getGeneralPending(client);
+
   if (retail) {
-    console.log("[INFO] SINCRONIZANDO ", retail);
+    console.log(`[INFO] SINCRONIZANDO ${client}-${retail}`);
     await B2B_SERVICE.startSyncGeneral(client, retail);
 
     const folios: string[] = await getConnection(client)
@@ -93,8 +94,10 @@ export async function syncStoreB2B(client: string): Promise<void> {
     );
 
     // Buscar en Store master solo las salas que esten en la aplicacion vigente
+    console.log(`[INFO] GET INFO SALAS x SYNC | ${client}-${retail}`);
     const allStoreMaster = await MASTER_SERVICE.findStore2(localRetail);
 
+    console.log(`[INFO] GET VISITAS x SALAS | ${client}-${retail}`);
     // Ultimas visitas reportadas por SUPI en base a las salas disponibles en la aplicacion
     const codigoEstudioSupi = ESTUDIOS_SUPI_CLIENTS[client];
     let allUltimasVisitas = [];
@@ -113,9 +116,9 @@ export async function syncStoreB2B(client: string): Promise<void> {
       );
     }
 
-    console.log("[INFO] Actualizando resumen");
+    console.log(`[INFO] ACTUALIZANDO RESUMEN | ${client}-${retail}`);
     await summaryProcess(client);
-    console.log("[INFO] Finalizando Sincronizacion");
+    console.log(`[INFO] RESTAURANDO GENERAL | ${client}-${retail}`);
     await B2B_SERVICE.resetGeneralPending(client, retail);
     await B2B_SERVICE.stopSyncGeneral(client, retail);
 
@@ -131,7 +134,9 @@ export async function syncStoreB2B(client: string): Promise<void> {
       await B2B_SERVICE.updateNotificationAppDate(client, retail);
     }
 
-    console.log("[INFO] Termino");
+    console.log(`[INFO] SINCRONIZACION ${client}-${retail} FINALIZADA`);
+  } else {
+    console.log(`[INFO] NO HAY RETAIL POR SYNC EN: ${client}`);
   }
 }
 
@@ -256,6 +261,7 @@ async function summaryProcess(client: string): Promise<void> {
         movItemStore.itemValido = current.item_valido;
         movItemStore.ventasUnidades = current.venta_unidades;
         movItemStore.bandera = storeDetail.bandera;
+        let stockSala = parseFloat(current.stock);
         if (Number(movItemStore.ventaPerdida) === 0) {
           movItemStore.accion = null;
         } else if (
