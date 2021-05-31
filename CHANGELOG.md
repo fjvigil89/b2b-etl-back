@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.0.12] - 2020-08-21
+- Corrección casteo stock a number en Item y Store
+- Corrección de casteo stock cuando stock es nulo o nan.
+- Definición de versión en package.json
+
 ## [2.0.6] - 2020-08-21
 - Update node version in gitlab-ci
 
