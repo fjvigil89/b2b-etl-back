@@ -1,6 +1,14 @@
 # Changelog
 
-## [2.0.12] - 2020-08-21
+## [2.0.13] - 2021-05-31
+## Fix
+- Corrección de puerto en archivo .env
+- Cambio de horario en los cron x cliente.
+- se añaden logs para ver mejor lo que se está ejecutando.
+- Se arregla fecha en CHANGELOG de la versión 2.0.12
+
+## [2.0.12] - 2021-05-31
+## Fix
 - Corrección casteo stock a number en Item y Store
 - Corrección de casteo stock cuando stock es nulo o nan.
 - Definición de versión en package.json
