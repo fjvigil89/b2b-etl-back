@@ -36,7 +36,7 @@ export const StoreSchedulerPERNOD = new CronJob(
 );
 
 export const StoreSchedulerANDINA = new CronJob(
-  "5 */1 * * *",
+  "20 */1 * * * *",
   async () => {
     await syncStoreB2B("andina");
   },
@@ -46,7 +46,7 @@ export const StoreSchedulerANDINA = new CronJob(
 );
 
 export const StoreSchedulerABI = new CronJob(
-  "15 */1 * * *",
+  "15 */1 * * * *",
   async () => {
     await syncStoreB2B("abi");
   },
@@ -56,7 +56,7 @@ export const StoreSchedulerABI = new CronJob(
 );
 
 export const StoreSchedulerCIAL = new CronJob(
-  "20 */1 * * *",
+  "30 */1 * * * *",
   async () => {
     await syncStoreB2B("cial");
   },

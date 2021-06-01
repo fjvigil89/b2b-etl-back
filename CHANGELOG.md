@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.14] - 2021-06-01
+## Fix
+- Corrección de la forma en que se ejecutan los cron x cliente
+
 ## [2.0.13] - 2021-05-31
 ## Fix
 - Corrección de puerto en archivo .env
