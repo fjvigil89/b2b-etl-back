@@ -87,6 +87,10 @@ export const config = {
     ...CIAL_PRODUCTION,
     DB: "b2b-cial",
   },
+  CIAL_TESTING_B2B: {
+    ...CIAL_TESTING,
+    DB: "b2b-cial",
+  },
   SMARTWEB: {
     CIAL: {
       DB: env.SOURCE_SMARTWEB_CIAL_DB,

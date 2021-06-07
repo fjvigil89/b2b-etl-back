@@ -79,7 +79,7 @@ const ESTUDIOS_SUPI_CLIENTS = {
 export async function syncStoreB2B(client: string): Promise<void> {
   await Connection;
   const retail = await B2B_SERVICE.getGeneralPending(client);
-  
+
   if (retail) {
     console.log(`[INFO] SINCRONIZANDO ${client}-${retail}`);
     await B2B_SERVICE.startSyncGeneral(client, retail);
@@ -135,8 +135,8 @@ export async function syncStoreB2B(client: string): Promise<void> {
     }
 
     console.log(`[INFO] SINCRONIZACION ${client}-${retail} FINALIZADA`);
-  }else{
-    console.log(`[INFO] NO HAY RETAIL POR SYNC EN: ${client}`);    
+  } else {
+    console.log(`[INFO] NO HAY RETAIL POR SYNC EN: ${client}`);
   }
 }
 
@@ -261,7 +261,7 @@ async function summaryProcess(client: string): Promise<void> {
         movItemStore.itemValido = current.item_valido;
         movItemStore.ventasUnidades = current.venta_unidades;
         movItemStore.bandera = storeDetail.bandera;
-        let stockSala = parseFloat(current.stock)
+        let stockSala = parseFloat(current.stock);
         if (Number(movItemStore.ventaPerdida) === 0) {
           movItemStore.accion = null;
         } else if (
@@ -274,7 +274,7 @@ async function summaryProcess(client: string): Promise<void> {
         } else if (stockSala < 0) {
           movItemStore.accion = "Ajustar";
         } else {
-          movItemStore.accion = "Reponer";
+          movItemStore.accion = "Revisar";
         }
         acc.push(movItemStore);
       }

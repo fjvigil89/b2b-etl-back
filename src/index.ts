@@ -18,14 +18,14 @@ console.log("[INFO] Cargando archivo de producción");
 
 dotenv.config({ path: resolve() + "/.env" });
 
-StoreSchedulerABI.start();
+//StoreSchedulerABI.start();
 // StoreSchedulerICB.start();
 // StoreSchedulerPERNOD.start();
-StoreSchedulerANDINA.start();
-StoreSchedulerCIAL.start();
+//StoreSchedulerANDINA.start();
+///StoreSchedulerCIAL.start();
 
 async function ejecucionManual() {
   await syncStoreB2B("cial");
 }
 
-// ejecucionManual();
+ejecucionManual();
