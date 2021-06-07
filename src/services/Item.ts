@@ -50,7 +50,7 @@ export class ItemService {
         newItem.diasSinVenta = item.diasSinVenta;
         newItem.ventaUnidades = item.ventaUnidades;
         // @ts-ignore
-        let stockItem = parseFloat(item.stock)
+        let stockItem = parseFloat(item.stock);
 
         // Ultimos quiebres
         const found = ultimoQuiereCademSmartYquiebreConsecutivo.find(
@@ -73,14 +73,6 @@ export class ItemService {
         }
 
         if (
-<<<<<<< HEAD
-          parseInt(item.stock.toString()) === 0 ||
-          item.stock === null ||
-          item.stock === undefined
-        ) {
-          newItem.accion = "Chequear pedidos";
-        } else if (parseInt(item.stock.toString()) < 0) {
-=======
           stockItem === 0 ||
           stockItem === null ||
           stockItem === undefined ||
@@ -88,7 +80,6 @@ export class ItemService {
         ) {
           newItem.accion = "Chequear pedidos";
         } else if (stockItem < 0) {
->>>>>>> 24086f18d12508e54f0beba31a7b24dc0b99d916
           newItem.accion = "Ajustar";
         } else {
           const dateStaticStock = moment(date)
@@ -103,7 +94,7 @@ export class ItemService {
           if (staticStock) {
             newItem.accion = "Ajustar";
           } else {
-            newItem.accion = "Reponer";
+            newItem.accion = "Revisar";
           }
         }
         newItem.ventaPerdida = item.promedioVentas;
