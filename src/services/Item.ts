@@ -50,7 +50,7 @@ export class ItemService {
         newItem.diasSinVenta = item.diasSinVenta;
         newItem.ventaUnidades = item.ventaUnidades;
         // @ts-ignore
-        let stockItem = parseFloat(item.stock)
+        let stockItem = parseFloat(item.stock);
 
         // Ultimos quiebres
         const found = ultimoQuiereCademSmartYquiebreConsecutivo.find(
@@ -94,7 +94,7 @@ export class ItemService {
           if (staticStock) {
             newItem.accion = "Ajustar";
           } else {
-            newItem.accion = "Reponer";
+            newItem.accion = "Revisar";
           }
         }
         newItem.ventaPerdida = item.promedioVentas;

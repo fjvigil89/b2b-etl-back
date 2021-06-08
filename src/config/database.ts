@@ -42,19 +42,19 @@ export const Connection = createConnections([
     username: config.CIAL_DB.USER_DB,
     connectTimeout: 25000,
   },
-  // {
-  //   name: "cial",
-  //   database: config.CIAL_TESTING_DB.DB,
-  //   entities: [Case, Item, Store, Summary, User],
-  //   host: config.CIAL_TESTING_DB.SERVER,
-  //   logging: false,
-  //   password: config.CIAL_TESTING_DB.PASSWORD,
-  //   port: config.CIAL_TESTING_DB.PORT_DB,
-  //   synchronize: false,
-  //   type: DIALECT,
-  //   username: config.CIAL_TESTING_DB.USER_DB,
-  //   connectTimeout: 25000,
-  // },
+  {
+    name: "cial_testing",
+    database: config.CIAL_TESTING_DB.DB,
+    entities: [Case, Item, Store, Summary, User],
+    host: config.CIAL_TESTING_DB.SERVER,
+    logging: false,
+    password: config.CIAL_TESTING_DB.PASSWORD,
+    port: config.CIAL_TESTING_DB.PORT_DB,
+    synchronize: false,
+    type: DIALECT,
+    username: config.CIAL_TESTING_DB.USER_DB,
+    connectTimeout: 25000,
+  },
 ]);
 
 export const B2B = {
@@ -100,10 +100,38 @@ export const B2B = {
       connectTimeout: 25000,
     })
     .connect(),
+  cial_testing: new ConnectionManager()
+    .create({
+      database: config.CIAL_TESTING_B2B.DB,
+      entities: [],
+      host: config.CIAL_TESTING_B2B.SERVER,
+      logging: false,
+      password: config.CIAL_TESTING_B2B.PASSWORD,
+      port: config.CIAL_TESTING_B2B.PORT_DB,
+      synchronize: false,
+      type: DIALECT,
+      username: config.CIAL_TESTING_B2B.USER_DB,
+      connectTimeout: 25000,
+    })
+    .connect(),
 };
 
 export const SMARTWEB = {
   cial: new ConnectionManager()
+    .create({
+      database: config.SMARTWEB.CIAL.DB,
+      entities: [],
+      host: config.SMARTWEB.CIAL.SERVER,
+      logging: false,
+      password: config.SMARTWEB.CIAL.PASSWORD,
+      port: config.SMARTWEB.CIAL.PORT_DB,
+      synchronize: false,
+      type: DIALECT,
+      username: config.SMARTWEB.CIAL.USER_DB,
+      connectTimeout: 25000,
+    })
+    .connect(),
+  cial_testing: new ConnectionManager()
     .create({
       database: config.SMARTWEB.CIAL.DB,
       entities: [],
