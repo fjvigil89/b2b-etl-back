@@ -151,7 +151,7 @@ export function staticStock(
 }
 
 export function getGeneralPending(client: string): Promise<string> {
-  return Promise.resolve("TOTTUS");
+  // return Promise.resolve("TOTTUS");
 
   return B2B[client].then((conn) =>
     conn
