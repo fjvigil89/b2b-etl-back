@@ -28,4 +28,4 @@ async function ejecucionManual() {
   await syncStoreB2B("cial");
 }
 
-ejecucionManual();
+// ejecucionManual();
