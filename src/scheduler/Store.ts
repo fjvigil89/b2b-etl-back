@@ -65,6 +65,16 @@ export const StoreSchedulerCIAL = new CronJob(
   "America/Santiago"
 );
 
+export const StoreSchedulerEMBONOR = new CronJob(
+  "10 */1 * * * *",
+  async () => {
+    await syncStoreB2B("embonor");
+  },
+  null,
+  null,
+  "America/Santiago"
+);
+
 const itemService = new ItemService();
 const notificationService = new NotificationService();
 
@@ -74,6 +84,7 @@ const ESTUDIOS_SUPI_CLIENTS = {
   pernod: 34,
   icb: 101,
   cial: 504,
+  embonor: 525,
 };
 
 export async function syncStoreB2B(client: string): Promise<void> {

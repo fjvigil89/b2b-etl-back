@@ -7,6 +7,7 @@ import {
   StoreSchedulerICB,
   StoreSchedulerPERNOD,
   StoreSchedulerCIAL,
+  StoreSchedulerEMBONOR,
 } from "./scheduler";
 import { syncStoreB2B } from "./scheduler/Store";
 
@@ -23,9 +24,10 @@ StoreSchedulerABI.start();
 // StoreSchedulerPERNOD.start();
 StoreSchedulerANDINA.start();
 StoreSchedulerCIAL.start();
+StoreSchedulerEMBONOR.start();
 
 async function ejecucionManual() {
-  await syncStoreB2B("cial");
+  await syncStoreB2B("embonor");
 }
 
 // ejecucionManual();

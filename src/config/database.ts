@@ -173,6 +173,20 @@ export const SMARTWEB = {
       connectTimeout: 25000,
     })
     .connect(),
+  embonor: new ConnectionManager()
+    .create({
+      database: config.SMARTWEB.EMBONOR.DB,
+      entities: [],
+      host: config.SMARTWEB.EMBONOR.SERVER,
+      logging: false,
+      password: config.SMARTWEB.EMBONOR.PASSWORD,
+      port: config.SMARTWEB.EMBONOR.PORT_DB,
+      synchronize: false,
+      type: DIALECT,
+      username: config.SMARTWEB.EMBONOR.USER_DB,
+      connectTimeout: 25000,
+    })
+    .connect(),
 };
 
 export const SUPI = new ConnectionManager()
