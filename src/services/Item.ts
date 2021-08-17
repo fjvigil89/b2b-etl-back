@@ -101,11 +101,12 @@ export class ItemService {
         if (detailMaster) {
           newItem.description = detailMaster.description;
           newItem.category = detailMaster.category;
+
+          detailItems.push(newItem);
         } else {
           newItem.description = "OTROS";
           newItem.category = "OTROS";
         }
-        detailItems.push(newItem);
       })
     );
 
