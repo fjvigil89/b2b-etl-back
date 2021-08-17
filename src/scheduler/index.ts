@@ -4,6 +4,7 @@ import {
   StoreSchedulerCIAL,
   StoreSchedulerICB,
   StoreSchedulerPERNOD,
+  StoreSchedulerEMBONOR,
 } from "./Store";
 
 export {
@@ -12,4 +13,5 @@ export {
   StoreSchedulerICB,
   StoreSchedulerPERNOD,
   StoreSchedulerCIAL,
+  StoreSchedulerEMBONOR,
 };
