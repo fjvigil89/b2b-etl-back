@@ -55,6 +55,19 @@ export const Connection = createConnections([
     username: config.CIAL_TESTING_DB.USER_DB,
     connectTimeout: 25000,
   },
+  {
+    name: "embonor",
+    database: config.EMBONOR_B2B.DB,
+    entities: [Case, Item, Store, Summary, User],
+    host: config.EMBONOR_B2B.SERVER,
+    logging: false,
+    password: config.EMBONOR_B2B.PASSWORD,
+    port: config.EMBONOR_B2B.PORT_DB,
+    synchronize: false,
+    type: DIALECT,
+    username: config.EMBONOR_B2B.USER_DB,
+    connectTimeout: 25000,
+  },
 ]);
 
 export const B2B = {
@@ -111,6 +124,20 @@ export const B2B = {
       synchronize: false,
       type: DIALECT,
       username: config.CIAL_TESTING_B2B.USER_DB,
+      connectTimeout: 25000,
+    })
+    .connect(),
+  embonor: new ConnectionManager()
+    .create({
+      database: config.EMBONOR_B2B.DB,
+      entities: [],
+      host: config.EMBONOR_B2B.SERVER,
+      logging: false,
+      password: config.EMBONOR_B2B.PASSWORD,
+      port: config.EMBONOR_B2B.PORT_DB,
+      synchronize: false,
+      type: DIALECT,
+      username: config.EMBONOR_B2B.USER_DB,
       connectTimeout: 25000,
     })
     .connect(),
