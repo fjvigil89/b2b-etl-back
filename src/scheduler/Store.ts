@@ -120,9 +120,13 @@ export async function syncStoreB2B(client: string): Promise<void> {
     }
 
     for (const chunk of Util.chunk(allStoreMaster, 100)) {
+      const cod_locals = chunk.map(store => store.cod_local);
+
+      const ventasValores = await B2B_SERVICE.getVentasValorByCodLocals(client, retail, cod_locals);
+
       await Promise.all(
         chunk.map((store) =>
-          storeProcessv2(client, ListStore, store, allUltimasVisitas)
+          storeProcessv2(client, ListStore, store, allUltimasVisitas, ventasValores)
         )
       );
     }
@@ -155,7 +159,8 @@ const storeProcessv2 = async (
   client,
   ListStore,
   storeMaster,
-  allUltimasVisitas
+  allUltimasVisitas,
+  listVentasValores: {[key: string]: {fecha: string, venta_valor: string}}
 ) => {
   // Busca la sala B2B
   const storeB2B = ListStore.find(
@@ -228,6 +233,13 @@ const storeProcessv2 = async (
     newStore.osa = SUPI_SERVICE.OSA(toma);
   }
 
+  if (newStore.codLocal in listVentasValores) {
+    // @ts-ignore
+    newStore.ventaValor = listVentasValores[newStore.codLocal].venta_valor;
+  } else {
+    newStore.ventaValor = null;
+  }
+
   newStore.ventaPerdida = itemService.totalVentaPerdida(Items);
   await Promise.all([
     getConnection(client)
@@ -272,6 +284,7 @@ async function summaryProcess(client: string): Promise<void> {
         movItemStore.itemValido = current.item_valido;
         movItemStore.ventasUnidades = current.venta_unidades;
         movItemStore.bandera = storeDetail.bandera;
+        // @ts-ignore
         let stockSala = parseFloat(current.stock);
         if (Number(movItemStore.ventaPerdida) === 0) {
           movItemStore.accion = null;

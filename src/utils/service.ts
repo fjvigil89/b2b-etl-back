@@ -2,7 +2,7 @@ export function uniqBy(ary: any[], attr: string): any[] {
   return Array.from(new Set(ary.map((row) => row[attr])));
 }
 
-export function chunk(ary: any[], size: number): any[] {
+export function chunk<T>(ary: T[], size: number): T[][] {
   let tmp = [];
   return ary.reduce((acc, current, index) => {
       index++;

@@ -27,6 +27,15 @@ export class Store extends BaseEntity {
   })
   public dateB2B: string;
 
+  @Column({
+    name: "venta_valor",
+    type: "decimal",
+    scale: 10,
+    precision: 2,
+    nullable: true,
+  })
+  public ventaValor: number;
+
   @Column("integer", {
     name: "venta_perdida",
   })

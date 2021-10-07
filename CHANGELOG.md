@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.0] - 2021-10-07
+## feature
+- Se agrega calculo para obtener la suma de la venta valor del ultimo dia disponible de cada sala.
+
 ## [2.0.15] - 2021-06-08
 
 ## Fix

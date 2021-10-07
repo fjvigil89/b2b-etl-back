@@ -1,4 +1,5 @@
 import * as moment from "moment";
+import { Connection } from "typeorm";
 import { B2B } from "../../config/database";
 
 interface IDetailItem {
@@ -327,4 +328,41 @@ export function getDataMovimiento(
         LIMIT 20
     `)
   );
+}
+
+export async function getVentasValorByCodLocals(client: string, cadena: string, cod_locals: string[]) {
+  const connection: Connection = await B2B[client];
+
+  const results: any[] = await connection.query('SELECT cod_local, MAX(fecha) AS fecha FROM movimiento WHERE retail = ? AND cod_local IN (?) GROUP BY cod_local', [cadena, cod_locals]);
+
+  const map: {[key: string]: {fecha: string, venta_valor: string}} = {};
+
+  results.forEach(result => {
+    map[result.cod_local] = {
+      fecha: moment(result.fecha).format('YYYY-MM-DD'),
+      venta_valor: null,
+    };
+  });
+
+  const rows_data: any[] = await connection.query(`SELECT
+    retail,
+    cod_local,
+    SUM(venta_valor) AS venta_valor
+  FROM movimiento
+  WHERE retail = ? AND
+  CONCAT(fecha, cod_local) IN (?)
+  GROUP BY retail, cod_local`,[cadena, cod_locals.map(cod_local => `${(cod_local in map ? map[cod_local].fecha : '')}${cod_local}`)]);
+
+  rows_data.forEach(row => {
+    if (!(row.cod_local in map)) {
+      map[row.cod_local] = {
+        fecha: null,
+        venta_valor: row.venta_valor,
+      };
+    } else {
+      map[row.cod_local].venta_valor = row.venta_valor;
+    }
+  });
+
+  return map;
 }
