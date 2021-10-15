@@ -120,9 +120,7 @@ export async function syncStoreB2B(client: string): Promise<void> {
     }
 
     for (const chunk of Util.chunk(allStoreMaster, 100)) {
-      const cod_locals = chunk.map(store => store.cod_local);
-
-      const ventasValores = await B2B_SERVICE.getVentasValorByCodLocals(client, retail, cod_locals);
+      const ventasValores = await B2B_SERVICE.getVentasValorByCodLocals(client, chunk);
 
       await Promise.all(
         chunk.map((store) =>
@@ -233,9 +231,9 @@ const storeProcessv2 = async (
     newStore.osa = SUPI_SERVICE.OSA(toma);
   }
 
-  if (newStore.codLocal in listVentasValores) {
+  if (`${newStore.cadena}${newStore.codLocal}` in listVentasValores) {
     // @ts-ignore
-    newStore.ventaValor = listVentasValores[newStore.codLocal].venta_valor;
+    newStore.ventaValor = listVentasValores[`${newStore.cadena}${newStore.codLocal}`].venta_valor;
   } else {
     newStore.ventaValor = null;
   }

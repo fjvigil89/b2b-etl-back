@@ -1,6 +1,7 @@
 import * as moment from "moment";
 import { Connection } from "typeorm";
 import { B2B } from "../../config/database";
+import { IStoreMaster } from "./Master";
 
 interface IDetailItem {
   stock: number;
@@ -330,18 +331,26 @@ export function getDataMovimiento(
   );
 }
 
-export async function getVentasValorByCodLocals(client: string, cadena: string, cod_locals: string[]) {
+export async function getVentasValorByCodLocals(client: string, stores: IStoreMaster[]) {
   const connection: Connection = await B2B[client];
 
-  const results: any[] = await connection.query('SELECT cod_local, MAX(fecha) AS fecha FROM movimiento WHERE retail = ? AND cod_local IN (?) GROUP BY cod_local', [cadena, cod_locals]);
+  const key_retail_and_cod_local = stores.map(store => `${store.cadena}${store.cod_local}`);
+
+  const results: any[] = await connection.query('SELECT retail, cod_local, MAX(fecha) AS fecha FROM movimiento WHERE CONCAT(retail, cod_local) IN (?) GROUP BY retail, cod_local', [key_retail_and_cod_local]);
 
   const map: {[key: string]: {fecha: string, venta_valor: string}} = {};
 
   results.forEach(result => {
-    map[result.cod_local] = {
+    map[`${result.retail}${result.cod_local}`] = {
       fecha: moment(result.fecha).format('YYYY-MM-DD'),
       venta_valor: null,
     };
+  });
+
+  const key_fecha_retail_and_cod_local = stores.map(store => {
+    const key = `${store.cadena}${store.cod_local}`;
+
+    return `${(key in map ? map[key].fecha : '')}${key}`;
   });
 
   const rows_data: any[] = await connection.query(`SELECT
@@ -349,18 +358,19 @@ export async function getVentasValorByCodLocals(client: string, cadena: string, 
     cod_local,
     SUM(venta_valor) AS venta_valor
   FROM movimiento
-  WHERE retail = ? AND
-  CONCAT(fecha, cod_local) IN (?)
-  GROUP BY retail, cod_local`,[cadena, cod_locals.map(cod_local => `${(cod_local in map ? map[cod_local].fecha : '')}${cod_local}`)]);
+  WHERE CONCAT(fecha, retail, cod_local) IN (?)
+  GROUP BY retail, cod_local`,[key_fecha_retail_and_cod_local]);
 
   rows_data.forEach(row => {
-    if (!(row.cod_local in map)) {
-      map[row.cod_local] = {
+    const key = `${row.retail}${row.cod_local}`;
+
+    if (!(key in map)) {
+      map[key] = {
         fecha: null,
         venta_valor: row.venta_valor,
       };
     } else {
-      map[row.cod_local].venta_valor = row.venta_valor;
+      map[key].venta_valor = row.venta_valor;
     }
   });
 
