@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.1.2] - 2021-12-29
+## Fix
+- Se corrige error en el chunk cambiando una funcion propia reemplazandola por chunk de LoDash. 
+
+
 ## [2.1.1] - 2021-10-15
 ## feature
 - Se arregla calculo de la venta valor.
