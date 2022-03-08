@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.3] - 2022-03-08
+## Fix
+- Se cambia el punto de acceso a la base de datos de SUPI debido a la migración de esta.
+
 ## [2.1.2] - 2021-12-29
 ## Fix
 - Se corrige error en el chunk cambiando una funcion propia reemplazandola por chunk de LoDash. 
